@@ -1,0 +1,24 @@
+name: IAM Risk Scan
+
+on:
+  pull_request:
+    paths:
+      - "**.tf"
+      - "**.yaml"
+      - "**.yml"
+      - "**.json"
+
+jobs:
+  iam-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: mkkltech/iam-risk-scanner@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          severity-threshold: HIGH
+          fail-on-findings: false
